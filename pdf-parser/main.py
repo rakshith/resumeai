@@ -5,10 +5,10 @@ import io
 
 app = FastAPI(title="PDF Parser API")
 
-# Enable CORS for Next.js
+# Enable CORS for Next.js (development and production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],  # Allow all origins in production (or restrict to your Vercel domain)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
