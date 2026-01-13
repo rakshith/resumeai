@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { PromptBox } from "@/components/PromptBox"
 import { ResumePreview } from "@/components/ResumePreview"
+import { ExportActions } from "@/components/ExportActions"
 import { ATSInsightsDialog, ATSInsightsButton } from "@/components/ATSInsightsDialog"
 import { DashboardLayout } from "@/components/DashboardLayout"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
@@ -13,6 +14,7 @@ export default function Dashboard() {
     const [atsInsights, setAtsInsights] = useState<ATSInsightsType | null>(null)
     const [showInsights, setShowInsights] = useState(false)
     const [showFullscreenResume, setShowFullscreenResume] = useState(false)
+    const printRef = useRef<HTMLDivElement>(null)
 
     const handleOptimize = (resume: ResumeJSON, insights: ATSInsightsType) => {
         setResumeData(resume)
@@ -53,6 +55,15 @@ export default function Dashboard() {
                         <ResumePreview
                             resume={resumeData || undefined}
                             onMaximize={() => setShowFullscreenResume(true)}
+                            printRef={printRef}
+                        />
+                    </div>
+
+                    {/* Export Actions Section */}
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
+                        <ExportActions
+                            resume={resumeData}
+                            printRef={printRef}
                         />
                     </div>
                 </div>

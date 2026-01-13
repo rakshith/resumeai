@@ -234,3 +234,45 @@
 .duration-300 {
   animation-duration: 300ms;
 }
+
+/* Print Styles for PDF Export - WYSIWYG */
+@media print {
+
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  /* Preserve colors */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide UI elements, not content */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* The print container should take full page */
+  [data-print-container="true"] {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 20mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: white !important;
+  }
+
+  /* Keep content styling intact */
+  [data-print-content="true"] {
+    padding: 0 !important;
+  }
+}

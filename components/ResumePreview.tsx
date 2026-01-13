@@ -73,9 +73,10 @@ interface ResumePreviewProps {
     }
     onMaximize?: () => void
     isFullscreen?: boolean
+    printRef?: React.RefObject<HTMLDivElement | null>
 }
 
-export function ResumePreview({ resume, onMaximize, isFullscreen = false }: ResumePreviewProps) {
+export function ResumePreview({ resume, onMaximize, isFullscreen = false, printRef }: ResumePreviewProps) {
     const displayResume = resume || dummyResume;
 
     return (
@@ -102,10 +103,15 @@ export function ResumePreview({ resume, onMaximize, isFullscreen = false }: Resu
 
             {/* A4 Paper Container */}
             <div
-                className={`${isFullscreen ? 'w-[90%]' : 'w-full max-w-[210mm]'} bg-white shadow-2xl rounded-sm border border-border/50 transition-all duration-300`}
+                ref={printRef}
+                data-print-container="true"
+                className={`${isFullscreen ? 'w-[90%]' : 'w-full max-w-[210mm]'} bg-white shadow-2xl rounded-sm border border-border/50 transition-all duration-300 print:shadow-none print:border-none print:rounded-none print:w-full print:max-w-none`}
             >
                 {/* Resume Content */}
-                <div className="p-8 md:p-12 space-y-5 font-sans text-[11pt] text-gray-900 leading-relaxed">
+                <div
+                    data-print-content="true"
+                    className="p-8 md:p-12 space-y-5 font-sans text-[11pt] text-gray-900 leading-relaxed print:p-0 print:space-y-4"
+                >
                     {/* Header Section */}
                     <div className="text-center space-y-1.5 pb-4">
                         <h1 className="text-2xl md:text-3xl font-bold uppercase tracking-wider text-gray-900 leading-tight">
