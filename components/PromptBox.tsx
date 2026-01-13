@@ -136,7 +136,7 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
                         <Textarea
                             id="resume-text"
                             placeholder="Paste your resume here or upload a file..."
-                            className="h-[120px] md:h-[180px] w-full resize-none border-0 bg-transparent p-0 text-base md:text-lg focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground/50 leading-relaxed overflow-y-auto scrollbar-thin"
+                            className="h-[120px] md:h-[180px] w-full resize-none border-0 bg-transparent p-0 text-base md:text-sm focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground/50 leading-relaxed overflow-y-auto scrollbar-thin"
                             value={resumeText}
                             onChange={handleTextChange}
                             disabled={isTextDescriptionDisabled}
@@ -203,8 +203,8 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
                                     type="button"
                                     onClick={() => setGoal("fix")}
                                     className={`px-3 py-1 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all ${goal === "fix"
-                                            ? 'bg-primary text-primary-foreground shadow-sm'
-                                            : 'text-muted-foreground hover:text-foreground'
+                                        ? 'bg-primary text-primary-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
                                         }`}
                                 >
                                     Fix ATS
@@ -213,8 +213,8 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
                                     type="button"
                                     onClick={() => setGoal("generate")}
                                     className={`px-3 py-1 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all ${goal === "generate"
-                                            ? 'bg-primary text-primary-foreground shadow-sm'
-                                            : 'text-muted-foreground hover:text-foreground'
+                                        ? 'bg-primary text-primary-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
                                         }`}
                                 >
                                     Generate
