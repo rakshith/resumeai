@@ -102,7 +102,7 @@ export function ResumePreview({ resume, onMaximize, isFullscreen = false }: Resu
 
             {/* A4 Paper Container */}
             <div
-                className={`w-full max-w-[210mm] bg-white shadow-2xl rounded-sm border border-border/50 transition-all duration-300 ${isFullscreen ? 'shadow-none border-0' : ''}`}
+                className={`${isFullscreen ? 'w-[90%]' : 'w-full max-w-[210mm]'} bg-white shadow-2xl rounded-sm border border-border/50 transition-all duration-300`}
             >
                 {/* Resume Content */}
                 <div className="p-8 md:p-12 space-y-5 font-sans text-[11pt] text-gray-900 leading-relaxed">

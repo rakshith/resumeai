@@ -5,7 +5,7 @@ import { PromptBox } from "@/components/PromptBox"
 import { ResumePreview } from "@/components/ResumePreview"
 import { ATSInsightsDialog, ATSInsightsButton } from "@/components/ATSInsightsDialog"
 import { DashboardLayout } from "@/components/DashboardLayout"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import type { ResumeJSON, ATSInsights as ATSInsightsType } from "@/app/actions/optimizeResume"
 
 export default function Dashboard() {
@@ -59,7 +59,8 @@ export default function Dashboard() {
 
                 {/* Fullscreen Resume Modal */}
                 <Dialog open={showFullscreenResume} onOpenChange={setShowFullscreenResume}>
-                    <DialogContent className="max-w-[95vw] w-fit h-[95vh] p-0 overflow-y-auto bg-muted/30 border-none sm:rounded-2xl">
+                    <DialogTitle></DialogTitle>
+                    <DialogContent className="!max-w-[210mm] !w-[210mm] max-h-[90vh] p-0 overflow-y-auto scrollbar-glass bg-white/80 backdrop-blur-xl border border-white/20 shadow-2xl sm:rounded-2xl">
                         <div className="py-10 px-4 md:px-10 flex justify-center">
                             <ResumePreview
                                 resume={resumeData || undefined}

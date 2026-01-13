@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState } from "react"
 import { optimizeResume, type ResumeJSON, type ATSInsights } from "@/app/actions/optimizeResume"
 import { parseResumeFile } from "@/app/actions/parseResumeFile"
 import { chunkResumeText } from "@/app/actions/chunkResume"
@@ -30,18 +30,18 @@ interface PromptBoxProps {
 }
 
 export function PromptBox({ onOptimize }: PromptBoxProps) {
-    const [file, setFile] = React.useState<File | null>(null)
-    const [resumeText, setResumeText] = React.useState("")
-    const [goal, setGoal] = React.useState("fix")
-    const [targetRole, setTargetRole] = React.useState("")
-    const [jobDescription, setJobDescription] = React.useState("")
-    const [experienceLevel, setExperienceLevel] = React.useState("")
-    const [resumeLength, setResumeLength] = React.useState<"1" | "2">("1")
-    const [tone, setTone] = React.useState("professional")
-    const [isLoading, setIsLoading] = React.useState(false)
-    const [isParsing, setIsParsing] = React.useState(false)
-    const [isChunking, setIsChunking] = React.useState(false)
-    const [showAdvanced, setShowAdvanced] = React.useState(false)
+    const [file, setFile] = useState<File | null>(null)
+    const [resumeText, setResumeText] = useState("")
+    const [goal, setGoal] = useState("fix")
+    const [targetRole, setTargetRole] = useState("")
+    const [jobDescription, setJobDescription] = useState("")
+    const [experienceLevel, setExperienceLevel] = useState("")
+    const [resumeLength, setResumeLength] = useState<"1" | "2">("1")
+    const [tone, setTone] = useState("professional")
+    const [isLoading, setIsLoading] = useState(false)
+    const [isParsing, setIsParsing] = useState(false)
+    const [isChunking, setIsChunking] = useState(false)
+    const [showAdvanced, setShowAdvanced] = useState(false)
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -111,6 +111,11 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
                 })
             }
 
+            // Auto-set detected experience level from API
+            if (result.detected_experience_level) {
+                setExperienceLevel(result.detected_experience_level)
+            }
+
             if (onOptimize) {
                 onOptimize(result.resume, result.ats_insights)
             }
@@ -131,7 +136,7 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
                         <Textarea
                             id="resume-text"
                             placeholder="Paste your resume here or upload a file..."
-                            className="min-h-[80px] md:min-h-[100px] w-full resize-none border-0 bg-transparent p-0 text-base md:text-lg focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground/50 leading-relaxed"
+                            className="h-[120px] md:h-[180px] w-full resize-none border-0 bg-transparent p-0 text-base md:text-lg focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground/50 leading-relaxed overflow-y-auto scrollbar-thin"
                             value={resumeText}
                             onChange={handleTextChange}
                             disabled={isTextDescriptionDisabled}
@@ -198,8 +203,8 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
                                     type="button"
                                     onClick={() => setGoal("fix")}
                                     className={`px-3 py-1 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all ${goal === "fix"
-                                        ? 'bg-primary text-primary-foreground shadow-sm'
-                                        : 'text-muted-foreground hover:text-foreground'
+                                            ? 'bg-primary text-primary-foreground shadow-sm'
+                                            : 'text-muted-foreground hover:text-foreground'
                                         }`}
                                 >
                                     Fix ATS
@@ -208,8 +213,8 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
                                     type="button"
                                     onClick={() => setGoal("generate")}
                                     className={`px-3 py-1 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all ${goal === "generate"
-                                        ? 'bg-primary text-primary-foreground shadow-sm'
-                                        : 'text-muted-foreground hover:text-foreground'
+                                            ? 'bg-primary text-primary-foreground shadow-sm'
+                                            : 'text-muted-foreground hover:text-foreground'
                                         }`}
                                 >
                                     Generate
@@ -267,7 +272,7 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
                                     <Label className="text-[10px] uppercase tracking-[0.1em] font-black text-muted-foreground px-0.5">Experience Level</Label>
                                     <Select value={experienceLevel} onValueChange={setExperienceLevel}>
                                         <SelectTrigger className="h-10 rounded-xl shadow-sm">
-                                            <SelectValue placeholder="Select level" />
+                                            <SelectValue placeholder="Auto-detect" />
                                         </SelectTrigger>
                                         <SelectContent className="rounded-xl">
                                             <SelectItem value="fresher">Fresher / Junior</SelectItem>
