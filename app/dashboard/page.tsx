@@ -61,10 +61,7 @@ export default function Dashboard() {
 
                     {/* Export Actions Section */}
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
-                        <ExportActions
-                            resume={resumeData}
-                            printRef={printRef}
-                        />
+                        <ExportActions printRef={printRef} />
                     </div>
                 </div>
 
