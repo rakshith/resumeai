@@ -12,13 +12,15 @@ import type { ResumeJSON, ATSInsights as ATSInsightsType } from "@/app/actions/o
 export default function Dashboard() {
     const [resumeData, setResumeData] = useState<ResumeJSON | null>(null)
     const [atsInsights, setAtsInsights] = useState<ATSInsightsType | null>(null)
+    const [resumeLength, setResumeLength] = useState<"1" | "2">("1")
     const [showInsights, setShowInsights] = useState(false)
     const [showFullscreenResume, setShowFullscreenResume] = useState(false)
     const printRef = useRef<HTMLDivElement>(null)
 
-    const handleOptimize = (resume: ResumeJSON, insights: ATSInsightsType) => {
+    const handleOptimize = (resume: ResumeJSON, insights: ATSInsightsType, length: "1" | "2") => {
         setResumeData(resume)
         setAtsInsights(insights)
+        setResumeLength(length)
         // Auto-open insights dialog after optimization
         setShowInsights(true)
     }
@@ -56,12 +58,13 @@ export default function Dashboard() {
                             resume={resumeData || undefined}
                             onMaximize={() => setShowFullscreenResume(true)}
                             printRef={printRef}
+                            resumeLength={resumeLength}
                         />
                     </div>
 
                     {/* Export Actions Section */}
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
-                        <ExportActions printRef={printRef} />
+                        <ExportActions printRef={printRef} resumeLength={resumeLength} />
                     </div>
                 </div>
 
@@ -73,6 +76,7 @@ export default function Dashboard() {
                             <ResumePreview
                                 resume={resumeData || undefined}
                                 isFullscreen={true}
+                                resumeLength={resumeLength}
                             />
                         </div>
                     </DialogContent>

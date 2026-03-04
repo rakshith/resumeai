@@ -26,7 +26,7 @@ import {
 import { Settings2, Paperclip, Zap, Loader2, Info } from "lucide-react"
 
 interface PromptBoxProps {
-    onOptimize?: (resume: ResumeJSON, insights: ATSInsights) => void
+    onOptimize?: (resume: ResumeJSON, insights: ATSInsights, resumeLength: "1" | "2") => void
 }
 
 export function PromptBox({ onOptimize }: PromptBoxProps) {
@@ -117,7 +117,7 @@ export function PromptBox({ onOptimize }: PromptBoxProps) {
             }
 
             if (onOptimize) {
-                onOptimize(result.resume, result.ats_insights)
+                onOptimize(result.resume, result.ats_insights, resumeLength)
             }
         } catch (error) {
             console.error("Failed to optimize resume:", error)

@@ -2,18 +2,18 @@
 
 import { saveAs } from "file-saver";
 
-export async function exportToDocx(
+export async function exportToPdf(
     htmlElement: HTMLElement | null,
-    filename: string = "resume.docx",
+    filename: string = "resume.pdf",
     resumeLength: "1" | "2" = "1"
 ): Promise<void> {
     if (!htmlElement) {
-        console.error("No HTML element provided for DOCX export");
+        console.error("No HTML element provided for PDF export");
         return;
     }
 
     try {
-        const response = await fetch("/api/export-docx", {
+        const response = await fetch("/api/export-pdf", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,13 +25,13 @@ export async function exportToDocx(
         });
 
         if (!response.ok) {
-            throw new Error("Failed to generate DOCX");
+            throw new Error("Failed to generate PDF");
         }
 
         const blob = await response.blob();
         saveAs(blob, filename);
     } catch (error) {
-        console.error("DOCX export error:", error);
+        console.error("PDF export error:", error);
         throw error;
     }
 }

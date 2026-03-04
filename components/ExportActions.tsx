@@ -1,36 +1,45 @@
 "use client";
 
-import React from "react";
-import { useReactToPrint } from "react-to-print";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { FileDown, FileText, Lock } from "lucide-react";
+import { FileDown, FileText, Lock, Loader2 } from "lucide-react";
 import { exportToDocx } from "@/utils/exportDocx";
+import { exportToPdf } from "@/utils/exportPdf";
 
 interface ExportActionsProps {
     printRef: React.RefObject<HTMLDivElement | null>;
+    resumeLength?: "1" | "2";
 }
 
-export function ExportActions({ printRef }: ExportActionsProps) {
+export function ExportActions({ printRef, resumeLength = "1" }: ExportActionsProps) {
     // Simulated Pro status - set to false for paywall gating
     const isPro = true;
+    const [isExportingPdf, setIsExportingPdf] = useState(false);
+    const [isExportingDocx, setIsExportingDocx] = useState(false);
 
-    const handlePrint = useReactToPrint({
-        contentRef: printRef,
-        documentTitle: "resume",
-    });
-
-    const handleExportPDF = () => {
+    const handleExportPDF = async () => {
         if (!isPro) return;
-        handlePrint();
+        
+        setIsExportingPdf(true);
+        try {
+            await exportToPdf(printRef.current, "resume.pdf", resumeLength);
+        } catch (error) {
+            console.error("Failed to export PDF:", error);
+        } finally {
+            setIsExportingPdf(false);
+        }
     };
 
     const handleExportDOCX = async () => {
         if (!isPro) return;
 
+        setIsExportingDocx(true);
         try {
-            await exportToDocx(printRef.current, "resume.docx");
+            await exportToDocx(printRef.current, "resume.docx", resumeLength);
         } catch (error) {
             console.error("Failed to export DOCX:", error);
+        } finally {
+            setIsExportingDocx(false);
         }
     };
 
@@ -40,25 +49,33 @@ export function ExportActions({ printRef }: ExportActionsProps) {
                 <Button
                     variant="outline"
                     size="lg"
-                    disabled={!isPro}
+                    disabled={!isPro || isExportingPdf}
                     onClick={handleExportPDF}
                     className="w-full sm:w-auto gap-2"
                 >
                     {!isPro && <Lock className="h-4 w-4" />}
-                    <FileDown className="h-4 w-4" />
-                    Export PDF
+                    {isExportingPdf ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                        <FileDown className="h-4 w-4" />
+                    )}
+                    {isExportingPdf ? "Generating..." : "Export PDF"}
                 </Button>
 
                 <Button
                     variant="outline"
                     size="lg"
-                    disabled={!isPro}
+                    disabled={!isPro || isExportingDocx}
                     onClick={handleExportDOCX}
                     className="w-full sm:w-auto gap-2"
                 >
                     {!isPro && <Lock className="h-4 w-4" />}
-                    <FileText className="h-4 w-4" />
-                    Export DOCX
+                    {isExportingDocx ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                        <FileText className="h-4 w-4" />
+                    )}
+                    {isExportingDocx ? "Generating..." : "Export DOCX"}
                 </Button>
             </div>
 
