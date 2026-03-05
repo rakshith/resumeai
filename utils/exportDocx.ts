@@ -1,37 +1,27 @@
 "use client";
 
 import { saveAs } from "file-saver";
+import { toast } from "sonner";
+import { exportResumeToDocx } from "@/app/actions/exportResume";
+import { ResumeData } from "@/lib/resumeData";
 
 export async function exportToDocx(
-    htmlElement: HTMLElement | null,
-    filename: string = "resume.docx",
-    resumeLength: "1" | "2" = "1"
+  resume: ResumeData,
+  filename: string = "resume.docx",
+  resumeLength: "1" | "2" = "1"
 ): Promise<void> {
-    if (!htmlElement) {
-        console.error("No HTML element provided for DOCX export");
-        return;
-    }
+  if (!resume) {
+    toast.error("No resume data available");
+    return;
+  }
 
-    try {
-        const response = await fetch("/api/export-docx", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                html: htmlElement.innerHTML,
-                resumeLength,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error("Failed to generate DOCX");
-        }
-
-        const blob = await response.blob();
-        saveAs(blob, filename);
-    } catch (error) {
-        console.error("DOCX export error:", error);
-        throw error;
-    }
+  try {
+    const blob = await exportResumeToDocx(resume, resumeLength);
+    saveAs(blob, filename);
+    toast.success("Resume exported successfully!");
+  } catch (error) {
+    console.error("DOCX export error:", error);
+    toast.error("Failed to export resume. Please try again.");
+    throw error;
+  }
 }

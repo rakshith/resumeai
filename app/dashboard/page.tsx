@@ -64,7 +64,24 @@ export default function Dashboard() {
 
                     {/* Export Actions Section */}
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
-                        <ExportActions printRef={printRef} resumeLength={resumeLength} />
+                        <ExportActions 
+                            printRef={printRef} 
+                            resumeLength={resumeLength} 
+                            resume={resumeData ? {
+                                name: resumeData.name,
+                                title: resumeData.title,
+                                summary: resumeData.summary,
+                                skills: resumeData.skills,
+                                experience: resumeData.experience.map(exp => ({
+                                    company: exp.company,
+                                    role: exp.role,
+                                    duration: exp.duration,
+                                    bullets: exp.bullets
+                                })),
+                                projects: resumeData.projects,
+                                education: resumeData.education
+                            } : undefined}
+                        />
                     </div>
                 </div>
 

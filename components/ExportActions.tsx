@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button";
 import { FileDown, FileText, Lock, Loader2 } from "lucide-react";
 import { exportToDocx } from "@/utils/exportDocx";
 import { exportToPdf } from "@/utils/exportPdf";
+import { ResumeData } from "@/lib/resumeData";
 
 interface ExportActionsProps {
     printRef: React.RefObject<HTMLDivElement | null>;
     resumeLength?: "1" | "2";
+    resume?: Omit<ResumeData, 'email' | 'phone' | 'location'> & Partial<Pick<ResumeData, 'email' | 'phone' | 'location'>>;
 }
 
-export function ExportActions({ printRef, resumeLength = "1" }: ExportActionsProps) {
+export function ExportActions({ printRef, resumeLength = "1", resume }: ExportActionsProps) {
     // Simulated Pro status - set to false for paywall gating
     const isPro = true;
     const [isExportingPdf, setIsExportingPdf] = useState(false);
@@ -31,11 +33,18 @@ export function ExportActions({ printRef, resumeLength = "1" }: ExportActionsPro
     };
 
     const handleExportDOCX = async () => {
-        if (!isPro) return;
+        if (!isPro || !resume) return;
 
         setIsExportingDocx(true);
         try {
-            await exportToDocx(printRef.current, "resume.docx", resumeLength);
+            // Convert to full ResumeData with optional fields
+            const fullResume: ResumeData = {
+                ...resume,
+                email: resume.email || '',
+                phone: resume.phone || '',
+                location: resume.location || ''
+            };
+            await exportToDocx(fullResume, "resume.docx", resumeLength);
         } catch (error) {
             console.error("Failed to export DOCX:", error);
         } finally {
